@@ -1,0 +1,7 @@
+local\redes\servidor\ServidorValidarCPF$Verificacao.class
+local\redes\servidor\ValidadarEntradaCPF.class
+local\redes\servidor\EntradaInvalidaException.class
+local\redes\servidor\Cliente.class
+local\redes\servidor\Servidor.class
+local\redes\servidor\ServidorValidarCPF.class
+local\redes\servidor\ServidorValidarCPF$Operacao.class
