@@ -10,12 +10,16 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
-public class Servidor {
+public class Servidor extends Thread{
     
     private ServerSocket servidor;
     private Socket conexao;
     private DataInputStream entrada;
     private DataOutputStream saida;
+    
+    public Servidor (Socket conexao){
+        this.conexao=conexao;
+    }
     
     public Servidor(int porta){
         try {
@@ -27,12 +31,52 @@ public class Servidor {
         }
     }
 
+    @Override
+    public void run() {
+        
+           
+                ServidorValidarCPF servidorValidarCPF = new ServidorValidarCPF();
+                
+                System.out.println("Execuntando a Trehad n :"+Thread.currentThread().getName());
+                
+                try {
+                    
+                    entrada = new DataInputStream(conexao.getInputStream());
+                    String entradaCpf = entrada.readUTF();
+                    
+                    saida = new DataOutputStream(conexao.getOutputStream());
+                    saida.writeUTF(servidorValidarCPF.validarCPF(entradaCpf));
+                    
+                    //servidor.close();
+                    //System.out.println("PORTA DO SERVIDOR "+servidor.getLocalPort()+" FINALIZADO");
+                    
+                } catch (Exception e) {
+                    System.out.println("ERRO DE EXECUCAO DO SERVIDOR");
+                }
+         
+        
+    }
+    
     public static void main(String[] args) {
        
-        Servidor novaConexao = new Servidor(50000);
-        ServidorValidarCPF servidorValidarCPF = new ServidorValidarCPF();
-        
         try {
+            Servidor novaConexao = new Servidor(50000);
+            
+            while(true){
+                System.out.println("Aguardando nova Conexao");
+                Socket conexao = novaConexao.servidor.accept();
+                
+                Servidor tServidor = new Servidor(conexao);
+                
+                tServidor.start();
+            }
+            
+            
+            
+            /*
+            ServidorValidarCPF servidorValidarCPF = new ServidorValidarCPF();
+            
+            try {
             novaConexao.conexao=novaConexao.servidor.accept();
             
             novaConexao.entrada = new DataInputStream(novaConexao.conexao.getInputStream());
@@ -44,9 +88,12 @@ public class Servidor {
             novaConexao.servidor.close();
             
             
-        } catch (Exception e) {
+            } catch (Exception e) {
             System.out.println("ERRO DE EXECUCAO DO SERVIDOR");
+            }
+            System.out.println("PORTA DO SERVIDOR "+novaConexao.servidor.getLocalPort()+" FINALIZADO");
+        */      } catch (IOException ex) {
+            Logger.getLogger(Servidor.class.getName()).log(Level.SEVERE, null, ex);
         }
-        System.out.println("PORTA DO SERVIDOR "+novaConexao.servidor.getLocalPort()+" FINALIZADO");
     }
 }

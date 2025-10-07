@@ -9,8 +9,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class ServidorValidarCPF {
     
     public static final double divisor_verificador = 11.0;
-    public static int fator_verificador = 10;
-    public static int indiceDoCpfASerVerificado = 9;
+    public int fator_verificador = 10;
+    public int indiceDoCpfASerVerificado = 9;
     
     @FunctionalInterface
     interface Operacao <T,V,Y>{
@@ -64,6 +64,9 @@ public class ServidorValidarCPF {
     
     
     public String validarCPF(String numeroDoCpf){
+        
+        System.out.println("Valor das variaveis fator verificador"+ fator_verificador);
+        System.out.println("Valor das variaveis fator verificador"+ indiceDoCpfASerVerificado);
         
                 
         if(compararNumeroCPF((extracaoDeNumeroDoCPf(numeroDoCpf)),Character.getNumericValue(numeroDoCpf.charAt(9)))){
